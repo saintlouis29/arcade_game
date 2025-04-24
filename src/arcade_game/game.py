@@ -29,8 +29,11 @@ le module principal du projet arcade_game
 
 """
 
+import random
 import pyxel
+
 from arcade_game.spaceship import Spaceship
+from arcade_game.enemy import Enemy
 
 class Game:
     """
@@ -43,6 +46,7 @@ class Game:
         self.w = 128 #largeur de l'écran
         self.h = 256 #hauteur de l'écran
         self.spaceship = Spaceship(self, self.w//2, self.h-8) #instanciation du vaisseau
+        self.enemies = []
         pyxel.init(self.w, self.h, title="Arcade Game")
         # chargement des images
         pyxel.load("images.pyxres")
@@ -62,6 +66,13 @@ class Game:
             shoot.update()
         # mise à jour de la liste des tirs
         self.update_shoots()
+        # création des ennemis
+        self.create_enemy()
+        # déplacement des ennemis
+        for enemy in self.enemies:
+            enemy.update()
+        # mise à jour des ennemis
+        self.update_enemies()
 
     def update_shoots(self):
         """
@@ -74,6 +85,23 @@ class Game:
                 visible_shoots.append(shoot)
         self.spaceship.shoots = visible_shoots
 
+    def create_enemy(self):
+        """Création d'un ennemi
+        """
+        jeu = self
+        # un ennemi par seconde
+        if (pyxel.frame_count % 30 == 0):
+            enemy = Enemy(jeu, random.randint(0, 120), -8)
+            self.enemies.append(enemy)
+
+    def update_enemies(self):
+        """Suppression des ennemis hors écran
+        """
+        to_keep=[]
+        for enemy in self.enemies:
+            if enemy.y < self.h:
+                to_keep.append(enemy)
+        self.enemies = to_keep
     # =====================================================
     # == DRAW (30FPS)
     # =====================================================
@@ -85,6 +113,8 @@ class Game:
         for shoot in self.spaceship.shoots:
             shoot.draw()
         self.spaceship.draw()
+        for enemy in self.enemies:
+            enemy.draw()
 
 # instanciation de notre classe
 Game()
