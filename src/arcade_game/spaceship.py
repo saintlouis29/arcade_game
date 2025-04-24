@@ -3,7 +3,7 @@ Un module pour le vaisseau
                                    _     _
                                   | |   (_)
      ___ _ __   __ _  ___ ___  ___| |__  _ _ __
-    / __| '_ \ / _` |/ __/ _ \/ __| '_ \| | '_ \
+    / __| '_ \ / _` |/ __/ _ \/ __| '_ \| | '_ \.
     \__ \ |_) | (_| | (_|  __/\__ \ | | | | |_) |
     |___/ .__/ \__,_|\___\___||___/_| |_|_| .__/
         | |                               | |
@@ -19,7 +19,7 @@ Un module pour le vaisseau
               `. `.                       ,'`````.  ;  ;`
                 `._`.        __________   `.      \'__/`
                    `-:._____/______/___/____`.     \  `
-                               |       `._    `.    \
+                               |       `._    `.    \.
                                `._________`-.   `.   `.___
                                                   `------'`
 """
@@ -63,21 +63,19 @@ class Spaceship :
 
     def _move(self):
         """déplacement avec les touches de directions"""
-        if pyxel.btn(pyxel.KEY_RIGHT):
-            self.x += 1
-        if pyxel.btn(pyxel.KEY_LEFT):
-            self.x -= 1
-        if pyxel.btn(pyxel.KEY_UP):
-            self.y -= 1
-        if pyxel.btn(pyxel.KEY_DOWN):
-            self.y += 1
+        if pyxel.btn(pyxel.KEY_RIGHT) and self.x < self.game.w - self.w:
+            self.x += 2
+        if pyxel.btn(pyxel.KEY_LEFT) and self.x > 0:
+            self.x -= 2
+        if pyxel.btn(pyxel.KEY_UP) and self.y > 0:
+            self.y -= 2
+        if pyxel.btn(pyxel.KEY_DOWN) and self.y < self.game.h - self.h:
+            self.y += 2
 
     def _shoot(self):
         if pyxel.btn(pyxel.KEY_SPACE):
             shoot = Shoot(self, self.x, self.y)
             self.shoots.append(shoot)
-
-
 
     # =====================================================
     # == DRAW
