@@ -26,25 +26,31 @@ Un module pour le vaisseau
 
 import pyxel
 
+# =====================================================
+# SPACESHIP
+# =====================================================
+
 class Spaceship :
     """
     Une classe pour notre vaisseau
     """
-    def __init__(self, jeu, x, y):
+    def __init__(self, game, x, y):
         """Initialisation du vaisseau
-
+        :param game: L'instance du jeu
+        :type game: Game
         :param x: L'abscisse du coin supérieur gauche
         :type x: int
         :param y: L'ordonnée du coin supérieur gauche
         :type y: int
         """
-        self.jeu = jeu
+        self.game = game
         # position initiale du vaisseau
         self.x = x
         self.y = y
         # largeur (width) et hauteur du vaisseau (height)
         self.w = 8
         self.h = 8
+        self.shoots = []
 
     # =====================================================
     # == UPDATE
@@ -53,11 +59,25 @@ class Spaceship :
         """Mise à jour du vaisseau (30FPS)
         """
         self._move()
+        self._shoot()
 
     def _move(self):
         """déplacement avec les touches de directions"""
         if pyxel.btn(pyxel.KEY_RIGHT):
             self.x += 1
+        if pyxel.btn(pyxel.KEY_LEFT):
+            self.x -= 1
+        if pyxel.btn(pyxel.KEY_UP):
+            self.y -= 1
+        if pyxel.btn(pyxel.KEY_DOWN):
+            self.y += 1
+
+    def _shoot(self):
+        if pyxel.btn(pyxel.KEY_SPACE):
+            shoot = Shoot(self, self.x, self.y)
+            self.shoots.append(shoot)
+
+
 
     # =====================================================
     # == DRAW
@@ -66,5 +86,51 @@ class Spaceship :
         """
         Dessin du vaisseau
         """
-        # vaisseau (carre 8x8)
         pyxel.blt(self.x, self.y, 0, 0, 0, 8, 8)
+
+# =====================================================
+# SHOOT
+# =====================================================
+
+class Shoot:
+    """
+    Une classe pour nos tirs
+    """
+    def __init__(self, spaceship, x, y):
+        """Une classe pour les tirs du vaisseau
+
+        :param spaceship: le vaisseau d'où provient le tir
+        :type spaceship: SpaceShip
+        :param x: L'abscisse du coin supérieur gauche
+        :type x: int
+        :param y: L'ordonnée du coin supérieur gauche
+        :type y: int
+        """
+        self.spaceship = spaceship
+        # position initiale du vaisseau
+        self.x = x+2
+        self.y = y
+        # largeur (width) et hauteur du vaisseau (height)
+        self.w = 4
+        self.h = 6
+
+    # =====================================================
+    # == UPDATE
+    # =====================================================
+    def update(self):
+        """Mise à jour
+        """
+        self._move()
+
+    def _move(self):
+        """déplacement"""
+        self.y -= 2
+
+    # =====================================================
+    # == DRAW
+    # =====================================================
+    def draw(self):
+        """
+        Dessin du tir
+        """
+        pyxel.blt(self.x, self.y, 0, 10, 1, self.w, self.h)
