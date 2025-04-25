@@ -76,7 +76,7 @@ class Spaceship :
     def _shoot(self):
         if pyxel.btn(pyxel.KEY_SPACE):
             if pyxel.frame_count > self._last_shoot + 15:
-                shoot = Shoot(self, self.x, self.y)
+                shoot = Shoot(self.x, self.y)
                 self.shoots.append(shoot)
                 self._last_shoot = pyxel.frame_count
 
@@ -97,17 +97,14 @@ class Shoot:
     """
     Une classe pour nos tirs
     """
-    def __init__(self, spaceship, x, y):
+    def __init__(self, x, y):
         """Une classe pour les tirs du vaisseau
 
-        :param spaceship: le vaisseau d'où provient le tir
-        :type spaceship: SpaceShip
         :param x: L'abscisse du coin supérieur gauche
         :type x: int
         :param y: L'ordonnée du coin supérieur gauche
         :type y: int
         """
-        self.spaceship = spaceship
         # position initiale du vaisseau
         self.x = x+2
         self.y = y
